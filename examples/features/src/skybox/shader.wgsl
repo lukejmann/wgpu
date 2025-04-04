@@ -49,11 +49,21 @@ struct EntityOutput {
 fn vs_entity(
     @location(0) pos: vec3<f32>,
     @location(1) normal: vec3<f32>,
+    @builtin(instance_index) instance_idx: u32,
 ) -> EntityOutput {
     var result: EntityOutput;
+    
+    // Get position from uniform buffer based on instance index
+    let x = f32(instance_idx % 10u) * 4.0 - 18.0;
+    let z = f32(instance_idx / 10u % 10u) * 4.0 - 18.0;
+    let y = f32(instance_idx / 100u) * 4.0 - 8.0;
+    let offset = vec3<f32>(x, y, z);
+    
+    let world_pos = pos + offset;
+    
     result.normal = normal;
-    result.view = pos - r_data.cam_pos.xyz;
-    result.position = r_data.proj * r_data.view * vec4<f32>(pos, 1.0);
+    result.view = world_pos - r_data.cam_pos.xyz;
+    result.position = r_data.proj * r_data.view * vec4<f32>(world_pos, 1.0);
     return result;
 }
 

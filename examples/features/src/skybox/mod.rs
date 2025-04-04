@@ -14,6 +14,7 @@ struct Vertex {
 struct Entity {
     vertex_count: u32,
     vertex_buf: wgpu::Buffer,
+    position: [f32; 3], // Add position for grid layout
 }
 
 // Note: we use the Y=up coordinate space in this example.
@@ -131,6 +132,7 @@ impl crate::framework::Example for Example {
                     entities.push(Entity {
                         vertex_count: vertices.len() as u32,
                         vertex_buf,
+                        position: [0.0, 0.0, 0.0], // Default position
                     });
                 }
             }
@@ -454,7 +456,7 @@ impl crate::framework::Example for Example {
 
             for entity in self.entities.iter() {
                 rpass.set_vertex_buffer(0, entity.vertex_buf.slice(..));
-                rpass.draw(0..entity.vertex_count, 0..1);
+                rpass.draw(0..entity.vertex_count, 0..1000);
             }
 
             rpass.set_pipeline(&self.sky_pipeline);
