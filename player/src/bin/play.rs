@@ -25,8 +25,6 @@ fn main() {
 
     env_logger::init();
 
-    //TODO: setting for the backend bits
-    //TODO: setting for the target frame, or controls
 
     let dir = match std::env::args().nth(1) {
         Some(arg) if Path::new(&arg).is_dir() => PathBuf::from(arg),
